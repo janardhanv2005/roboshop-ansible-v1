@@ -1,13 +1,14 @@
 - name: create roboshop ec2 and route53 record
   hosts: local
   connection: local
-  instances: "['mysql']"
-  image_id: ami-0c55b159cbfafe1f0
-  instance_type: t2.micro
-  security_group: "roboshop-common"
-  region_name: us-east-1
-  hosted_zone: mithul.space
-  action: create
+  vars:
+    instances: "['mysql']"
+    image_id: ami-0c55b159cbfafe1f0
+    instance_type: t2.micro
+    security_group: "roboshop-common"
+    region_name: us-east-1
+    hosted_zone: mithul.space
+    action: create
   tasks:
     - name: Launch EC2 instance
       ec2:
