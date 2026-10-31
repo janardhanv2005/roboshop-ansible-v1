@@ -1,5 +1,6 @@
-- name: create EC2 instance
+- name: create EC2 instances
   hosts: local
+  connection: local
   instances: "['mysql']"
   image_id: ami-0c55b159cbfafe1f0
   instance_type: t2.micro
