@@ -44,7 +44,7 @@
     loop: "{{ instances }}"
     when: action == 'delete'
 
-  - name: terminate EC2 instance
+  - name: terminate EC2
     ec2:
       state: absent
       region: "{{ region_name }}"
