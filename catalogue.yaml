@@ -23,9 +23,11 @@
       file:
         path: /app
         state: absent
+
     - name: remove existing catalogue.zip
-      file: /tmp/catelogue.zip
-      state: absent
+      file: 
+        path: /tmp/catelogue.zip
+        state: absent
 
     - name: make directory
       file:
