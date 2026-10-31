@@ -1,4 +1,4 @@
-- name: create EC2 instances
+- name: create roboshop ec2 and route53 record
   hosts: local
   connection: local
   instances: "['mysql']"
