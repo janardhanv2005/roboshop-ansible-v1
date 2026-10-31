@@ -5,7 +5,6 @@
     instances: ["mysql"]
     ami_id: ami-0055977a6e828a4f4
     instance_type: t2.micro
-    common-sg: roboshop-common
     region_name: us-east-1
     domain_name: mithul.space
     action: create
@@ -15,7 +14,7 @@
       image_id: "{{ ami_id }}"
       instance_type: "{{ instance_type }}"
       security_groups:
-        - "{{ common-sg }}"
+        - roboshop-common
         - "roboshop-{{item}}"
       region: "{{ region_name }}"
     loop: "{{ instances }}"
