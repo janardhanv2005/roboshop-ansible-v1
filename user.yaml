@@ -32,7 +32,7 @@
     - name: make directory app
       file:
         path: /app
-        state: present
+        state: directory
 
     - name: download application 
       get_url:
@@ -48,7 +48,7 @@
     - name: Install dependencies
       community.general.npm:
         path: /app
-        
+
     - name: copy user service
       template:
         src: user.service.j2

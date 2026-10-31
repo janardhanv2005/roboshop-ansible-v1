@@ -4,3 +4,7 @@ mongodb_host: mongodb.mithul.space
 redis_host: redis.mithul.space
 mysql_host: mysql.mithul.space
 rabbitmq_host: rabbitmq.mithul.space
+user_host: user.daws92s.store
+cart_host: cart.daws92s.store
+shipping_host: shipping.daws92s.store
+payment_host: payment.daws92s.store
