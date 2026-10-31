@@ -3,43 +3,44 @@
   connection: local
   vars:
     instances: ["mysql"]
-    image_id: ami-0c55b159cbfafe1f0
+    ami_id: ami-0055977a6e828a4f4
     instance_type: t2.micro
-    security_group: "roboshop-common"
+    common-security_group: "roboshop-common"
     region_name: us-east-1
     domain_name: mithul.space
     action: create
   tasks:
   - name: Launch EC2 instance
     amazon.aws.ec2_instance:
-      group: "{{ security_group }}"
+      image_id: "{{ ami_id }}"
       instance_type: "{{ instance_type }}"
-      image: "{{ image_id }}"
-      wait: yes
+      security_groups:
+        - "{{ common-security_group }}"
+        - "roboshop-{{item}}"
       region: "{{ region_name }}"
-      count: 1
-      instance_tags:
-        Name: "{{ item }}"
     loop: "{{ instances }}"
     when: action == 'create'
+    register: ec2_output
+    
+  - name: create R53 record
+      amazon.aws.route53":
+        state: present
+        zone: "{{ domain_name }}"
+        record: "{{ item.item }}.{{ domain_name }}"
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].private_ip_address }}"
+        overwrite: true
+      loop: "{{ ec2_output.results }}"
+      when: action == "create"
 
-  - name: update route53 record
-    amazon.aws.route53:
-      state: present
-      zone: "{{ domain_name }}"
-      record: "{{ item }}.{{ domain_name }}"
-      type: A
-      ttl: 300
-      value: "{{ ec2.instances[0].public_ip }}"
-      overwrite: yes
-    loop: "{{ instances }}"
-    when: action == 'create'
 
   - name: remove route53 record
     amazon.aws.route53:
       state: absent
       zone: "{{ domain_name }}"
       record: "{{ item }}.{{ domain_name }}"
+      type: A
     loop: "{{ instances }}"
     when: action == 'delete'
 
