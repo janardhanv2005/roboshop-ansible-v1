@@ -1,5 +1,5 @@
 - name: Configure Payment
-  hosts: Payment
+  hosts: payment
   become: true
   tasks:
     - name: install Python and Pip
