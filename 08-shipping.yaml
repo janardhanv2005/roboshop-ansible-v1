@@ -61,7 +61,7 @@
     - name: install dependencies
       command: mvn clean package
       args:
-      chdir: /app
+        chdir: /app
 
     - name: copy shipping service
       template:
