@@ -35,7 +35,7 @@
 
     - name: download application 
       get_url:
-        url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/cart-{{ app_version }}.zip
+        url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/payment-v4.zip
         dest: /tmp/payment.zip
     
     - name: unarchive cart zip
