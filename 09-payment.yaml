@@ -23,7 +23,7 @@
         path: /app
         state: absent
 
-    - name: remove existing user zip
+    - name: remove existing payement zip
       file:
         path: /tmp/payment.zip
         state: absent
@@ -43,3 +43,24 @@
         src: /tmp/payment.zip
         dest: /app
         remote_src: yes
+
+    - name: Create Python virtual environment
+      command:
+        cmd: python3.14 -m venv /app/.venv
+        creates: /app/.venv/bin/python
+
+    - name: Install Python dependencies
+      pip:
+        requirements: /app/requirements.txt
+        virtualenv: /app/.venv
+
+    - name: daemon reload
+      systemd_service:
+        daemon_reload: true
+    
+    - name: start and enable payment
+      service:
+        name: payment
+        state: restarted
+        enabled: yes
+
