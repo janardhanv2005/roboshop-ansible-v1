@@ -1,0 +1,79 @@
+- name: Configure Shipping
+  hosts: shipping
+  become: true
+  tasks:
+    - name: enable maven 3.9
+      command: dnf module enable maven:3.9 -y
+
+    - name: install maven and java
+      dnf:
+        name: 
+        - maven
+        - java-25-openjdk-devel
+        - maven-openjdk25
+        state: present
+
+    - name: add user
+      user:
+        name: roboshop
+        comment: roboshop system user
+        system: true
+        create_home: false
+        home: /app
+        shell: /sbin/nologin
+
+    - name: Remove existing app directory
+      file:
+        path: /app
+        state: absent
+
+    - name: remove existing shipping zip
+      file:
+        path: /tmp/shipping.zip
+        state: absent
+
+    - name: make directory app
+      file:
+        path: /app
+        state: directory
+
+    - name: download application 
+      get_url:
+        url:  https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/shipping-v4.zip
+        dest: /tmp/shipping.zip
+    
+    - name: unarchive shipping zip
+      unarchive:
+        src: /tmp/shipping.zip
+        dest: /app
+        remote_src: yes
+
+    - name: mvn version without JAVA_HOME
+      command: mvn --version
+      args:
+        chdir: /app
+      register: mvn_default
+
+    - name: print mvn version without JAVA_HOME
+      debug:
+        msg: "{{ mvn_default.stdout_lines }}"
+
+    - name: install dependencies
+      command: mvn clean package
+      args:
+      chdir: /app
+
+    - name: copy shipping service
+      template:
+        src: shipping.service.j2
+        dest: /etc/systemd/system/shipping.service
+
+    - name: daemon reload
+      systemd_service:
+        daemon_reload: true
+    
+    - name: start and enable shipping
+      service:
+        name: shipping
+        state: restarted
+        enabled: yes
