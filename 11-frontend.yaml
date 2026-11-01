@@ -2,8 +2,11 @@
   hosts: frontend
   become: true
   tasks:
+    - name: disable nginx 
+      command: dnf module disable nginx -y
+
     - name: enable nginx 1.26
-      command: dnf module enable nginx:1.26
+      command: dnf module enable nginx:1.26 -y
 
     - name: install nginx
       package:
