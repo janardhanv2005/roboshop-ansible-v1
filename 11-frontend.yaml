@@ -4,18 +4,43 @@
 
   tasks:
     - name: Enable Nginx 1.26 module
-      ansible.builtin.command:
-        cmd: dnf -y module enable nginx:1.26
+      command: dnf -y module enable nginx:1.26
       register: nginx_module
       changed_when: "'Complete!' in nginx_module.stdout"
 
     - name: Install Nginx
-      ansible.builtin.dnf:
+      dnf:
         name: nginx
         state: present
 
     - name: Start and enable Nginx
-      ansible.builtin.service:
+      service:
         name: nginx
         state: started
         enabled: true
+
+    - name: Remove default html
+      command: rm -rf /usr/share/nginx/html/*
+    
+    - name: download application 
+      get_url:
+        url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip
+        dest: /tmp/frontend.zip
+    
+    - name: unarchive frontend zip
+      unarchive:
+        src: /tmp/frontend.zip
+        dest: /usr/share/nginx/html/
+        remote_src: yes
+    
+    - name: copy frontend nginx conf 
+      template:
+        src: roboshop.conf.j2
+        dest: /etc/nginx/default.d/roboshop.conf
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: restarted
+    
+    -
