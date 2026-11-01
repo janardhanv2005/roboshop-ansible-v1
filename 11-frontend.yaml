@@ -1,19 +1,21 @@
 - name: Configure Frontend
   hosts: frontend
   become: true
+
   tasks:
-    - name: disable nginx 
-      command: dnf module disable nginx -y
+    - name: Enable Nginx 1.26 module
+      ansible.builtin.command:
+        cmd: dnf -y module enable nginx:1.26
+      register: nginx_module
+      changed_when: "'Complete!' in nginx_module.stdout"
 
-    - name: enable nginx 1.26
-      command: dnf module enable nginx:1.26 -y
-
-    - name: install nginx
-      package:
+    - name: Install Nginx
+      ansible.builtin.dnf:
         name: nginx
         state: present
-    - name: start nginx and enable
-      service:
+
+    - name: Start and enable Nginx
+      ansible.builtin.service:
         name: nginx
-        state: restarted
-        enabled: yes     
+        state: started
+        enabled: true
