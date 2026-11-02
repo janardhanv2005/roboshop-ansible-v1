@@ -4,11 +4,11 @@ mongodb_host: mongodb.mithul.space
 redis_host: redis.mithul.space
 mysql_host: mysql.mithul.space
 rabbitmq_host: rabbitmq.mithul.space
-catalogue_host: catalogue.daws92s.store
-user_host: user.daws92s.store
-cart_host: cart.daws92s.store
-shipping_host: shipping.daws92s.store
-payment_host: payment.daws92s.store
+catalogue_host: catalogue.mithul.space
+user_host: user.mithul.space
+cart_host: cart.mithul.space
+shipping_host: shipping.mithul.space
+payment_host: payment.mithul.space
 mysql_root_password: RoboShop@1
 shipping_db_user: shipping
 shipping_db_password: RoboShop@1
