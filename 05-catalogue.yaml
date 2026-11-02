@@ -71,8 +71,8 @@
       debug:
         msg: "{{ product_count }}"
 
-    - name: load products
-      command: mongosh --host {{mongodb_host}} /app/db/master-data.js
+    - name: load the products
+      shell: mongosh --host "{{ mongodb_host }}" < /app/db/master-data.js
       when: product_count.stdout | int == 0
     
     - name: daemon reload
