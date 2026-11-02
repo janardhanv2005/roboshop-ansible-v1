@@ -4,9 +4,7 @@
 
   tasks:
     - name: Enable Nginx 1.26 module
-      command: dnf -y module enable nginx:1.26
-      register: nginx_module
-      changed_when: "'Complete!' in nginx_module.stdout"
+      command: dnf module enable nginx:1.26 -y
 
     - name: Install Nginx
       dnf:
@@ -17,7 +15,25 @@
       service:
         name: nginx
         state: started
-        enabled: true
+        enabled: yes
+
+    # - name: Find all contents inside the directory
+    #   ansible.builtin.find:
+    #     paths: /usr/share/nginx/html/
+    #     recurse: true
+    #     hidden: true
+    #     file_type: any
+    #   register: directory_contents
+
+    # - name: print directory content
+    #   debug:
+    #     msg: "{{ directory_contents }}"
+
+    # - name: Delete the discovered contents
+    #   ansible.builtin.file:
+    #     path: "{{ item.path }}"
+    #     state: absent
+    #   loop: "{{ directory_contents.files }}"
 
     - name: Remove default html
       command: rm -rf /usr/share/nginx/html/*
@@ -38,7 +54,7 @@
         src: roboshop.conf.j2
         dest: /etc/nginx/default.d/roboshop.conf
 
-    - name: Start and enable Nginx
+    - name: restart Nginx
       service:
         name: nginx
         state: restarted
